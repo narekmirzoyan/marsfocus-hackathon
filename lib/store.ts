@@ -48,7 +48,7 @@ export const useUserStore = create<UserStore>()(
         const updatedMissions = [...currentState.missions, mission];
 
         // Calculate new user stats
-        const totalXP = currentState.user.totalXP + mission.xpEarned;
+        const totalXP = currentState.user.totalXP + (mission.xpEarned || 0);
         const totalFocusTime = currentState.user.totalFocusTime + mission.duration;
         const level = calculateLevel(totalXP);
 

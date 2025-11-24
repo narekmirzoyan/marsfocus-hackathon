@@ -14,7 +14,7 @@ export default function DashboardPage() {
   const [showBadges, setShowBadges] = useState(false);
 
   // Memoize stats to prevent infinite re-renders
-  const stats = useMemo(() => getStats(), [user.totalXP, user.level, missions.length]);
+  const stats = useMemo(() => getStats(), [getStats]);
 
   const formatTime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);

@@ -9,7 +9,10 @@
       "Bash(find:*)",
       "Bash(npm run dev:*)",
       "Bash(timeout /t 5 /nobreak)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

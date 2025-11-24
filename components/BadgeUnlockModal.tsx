@@ -18,7 +18,7 @@ export default function BadgeUnlockModal({ badges, onClose }: BadgeUnlockModalPr
             🎉 Badge{badges.length > 1 ? 's' : ''} Unlocked!
           </h2>
           <p className="text-mars-300">
-            You've achieved new milestones on Mars!
+            You have achieved new milestones on Mars!
           </p>
         </div>
 

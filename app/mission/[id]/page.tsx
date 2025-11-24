@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef, useCallback, use } from "react";
 import { useRouter } from "next/navigation";
 import type { Mission, DistractionEvent, Badge } from "@/types";
 import { calculateMissionXP } from "@/lib/xp";
@@ -37,6 +37,53 @@ export default function MissionPage({ params }: { params: Promise<{ id: string }
     }
   }, [id, router]);
 
+  // Handle mission completion
+  const handleMissionComplete = useCallback(() => {
+    if (!mission) return;
+
+    setIsActive(false);
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    const endTime = Date.now();
+    const startTime = mission.startTime || endTime;
+
+    // Calculate actual time spent in minutes
+    const actualDuration = Math.round((endTime - startTime) / 60000);
+
+    const completedMission: Mission = {
+      ...mission,
+      endTime,
+      duration: actualDuration, // Update duration to actual time spent
+      distractions,
+      xpEarned: calculateMissionXP({
+        ...mission,
+        duration: actualDuration, // Use actual duration for XP calculation
+        distractions
+      }),
+      completed: true,
+      status: 'completed',
+    };
+
+    setMission(completedMission);
+
+    // Save to Zustand store and get newly unlocked badges
+    const newBadges = addMission(completedMission);
+
+    // Also save to localStorage for backwards compatibility
+    localStorage.setItem(`mission-${id}`, JSON.stringify(completedMission));
+    const allMissions = JSON.parse(localStorage.getItem("missions") || "[]");
+    allMissions.push(completedMission);
+    localStorage.setItem("missions", JSON.stringify(allMissions));
+
+    // Show badge modal if any badges were unlocked
+    if (newBadges.length > 0) {
+      setUnlockedBadges(newBadges);
+      setShowBadgeModal(true);
+    } else {
+      setShowSummary(true);
+    }
+  }, [mission, distractions, addMission, id]);
+
   // Timer logic
   useEffect(() => {
     if (!isActive || isPaused || timeRemaining <= 0) {
@@ -56,7 +103,7 @@ export default function MissionPage({ params }: { params: Promise<{ id: string }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isActive, isPaused, timeRemaining]);
+  }, [isActive, isPaused, timeRemaining, handleMissionComplete]);
 
   // Distraction tracking
   useEffect(() => {
@@ -106,52 +153,6 @@ export default function MissionPage({ params }: { params: Promise<{ id: string }
   const handleStop = () => {
     if (confirm("Are you sure you want to stop this mission?")) {
       handleMissionComplete();
-    }
-  };
-
-  const handleMissionComplete = () => {
-    if (!mission) return;
-
-    setIsActive(false);
-    if (timerRef.current) clearInterval(timerRef.current);
-
-    const endTime = Date.now();
-    const startTime = mission.startTime || endTime;
-
-    // Calculate actual time spent in minutes
-    const actualDuration = Math.round((endTime - startTime) / 60000);
-
-    const completedMission: Mission = {
-      ...mission,
-      endTime,
-      duration: actualDuration, // Update duration to actual time spent
-      distractions,
-      xpEarned: calculateMissionXP({
-        ...mission,
-        duration: actualDuration, // Use actual duration for XP calculation
-        distractions
-      }),
-      completed: true,
-      status: 'completed',
-    };
-
-    setMission(completedMission);
-
-    // Save to Zustand store and get newly unlocked badges
-    const newBadges = addMission(completedMission);
-
-    // Also save to localStorage for backwards compatibility
-    localStorage.setItem(`mission-${id}`, JSON.stringify(completedMission));
-    const allMissions = JSON.parse(localStorage.getItem("missions") || "[]");
-    allMissions.push(completedMission);
-    localStorage.setItem("missions", JSON.stringify(allMissions));
-
-    // Show badge modal if any badges were unlocked
-    if (newBadges.length > 0) {
-      setUnlockedBadges(newBadges);
-      setShowBadgeModal(true);
-    } else {
-      setShowSummary(true);
     }
   };
 
