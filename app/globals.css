@@ -18,3 +18,14 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Performance-optimized CSS animations */
+@keyframes streak-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.streak-emoji {
+  animation: streak-pulse 2s ease-in-out infinite;
+  will-change: transform;
+}

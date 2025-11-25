@@ -8,6 +8,7 @@ interface BadgeUnlockModalProps {
 }
 
 export default function BadgeUnlockModal({ badges, onClose }: BadgeUnlockModalProps) {
+
   if (badges.length === 0) return null;
 
   return (

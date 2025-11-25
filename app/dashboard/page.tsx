@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import type { Mission } from "@/types";
 import { useUserStore } from "@/lib/store";
@@ -63,17 +63,17 @@ export default function DashboardPage() {
 
         {/* User Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6 transition-transform hover:scale-105">
             <div className="text-3xl font-bold text-mars-400">{formatTime(stats.totalFocusTime)}</div>
             <div className="text-sm text-gray-400 mt-1">Total Focus Time</div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6 transition-transform hover:scale-105">
             <div className="text-3xl font-bold text-blue-400">{stats.totalMissions}</div>
             <div className="text-sm text-gray-400 mt-1">Missions Completed</div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6 transition-transform hover:scale-105">
             <div className="text-3xl font-bold text-yellow-400">Level {stats.currentLevel}</div>
             <div className="text-sm text-gray-400 mt-1">{stats.totalXP} XP</div>
             <div className="mt-2">
@@ -84,7 +84,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6 transition-transform hover:scale-105">
             <div className="text-3xl font-bold text-green-400">
               {stats.averageDistractions.toFixed(1)}
             </div>
@@ -105,7 +105,7 @@ export default function DashboardPage() {
           <div className="bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-700/50 rounded-lg p-6 mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-4xl">🔥</span>
+                <span className="text-4xl streak-emoji">🔥</span>
                 <div>
                   <div className="text-2xl font-bold">
                     {stats.perfectFocusStreak} Mission Streak!
